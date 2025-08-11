@@ -8,8 +8,9 @@
 ## Preparing database
 
 ```sh
-cd database
+pushd database
 duckdb db.duckdb < build.sql
+popd
 ```
 
 ## Instruction
