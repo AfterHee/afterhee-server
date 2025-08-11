@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Search Test</title>
+</head>
+<body>
+    <h1>학교 검색 테스트</h1>
+    <input id="school-keyword" type="text" placeholder="학교 이름 입력" />
+    <button id="search-btn">검색</button>
+    <div id="school-search-result"></div>
+
+    <script>
+        document.getElementById('search-btn').addEventListener('click', () => {
+            const keyword = document.getElementById('school-keyword').value.trim();
+            if (!keyword) {
+                alert('검색어를 입력하세요.');
+                return;
+            }
+
+            fetch(`/api/v1/schools?keyword=${encodeURIComponent(keyword)}`)
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                    return res.json();
+                })
+                .then(data => {
+                    const resultDiv = document.getElementById('school-search-result');
+                    resultDiv.innerHTML = '';
+
+                    if (data.length === 0) {
+                        resultDiv.textContent = '검색 결과가 없습니다.';
+                        return;
+                    }
+
+                    const list = document.createElement('ul');
+                    data.forEach(school => {
+                        const li = document.createElement('li');
+                        li.textContent = `[${school.adminStandardCode}] ${school.schoolName} (${school.roadAddress} ${school.roadDetailAddress})`;
+                        list.appendChild(li);
+                    });
+                    resultDiv.appendChild(list);
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('API 호출 중 오류가 발생했습니다.');
+                });
+        });
+    </script>
+</body>
+</html>

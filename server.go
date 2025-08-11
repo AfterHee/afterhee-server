@@ -35,6 +35,7 @@ func main() {
 	// App
 	app := fiber.New()
 	app.Use(logger.New())
+	app.Static("/static", "./static")
 
 	// API Group
 	api := app.Group("/api")
