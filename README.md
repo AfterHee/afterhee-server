@@ -17,3 +17,8 @@ duckdb db.duckdb < build.sql
 ```sh
 go run server.go
 ```
+
+## Envirionments
+
+- `AFTERHEE_PORT`: 서버 포트. 지정하지 않으면 `8080`
+- `AFTERHEE_DUCKDB_FILENAME`: DuckDB 파일 경로. 지정하지 않으면 `database/db.duckdb`

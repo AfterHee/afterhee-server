@@ -6,6 +6,7 @@ import (
 	"0tak2/afterhee-server/service"
 	"database/sql"
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -14,8 +15,8 @@ import (
 
 // import "github.com/gofiber/fiber/v2"
 
-func createDB() *sql.DB {
-	db, err := sql.Open("duckdb", "database/db.duckdb")
+func createDB(dbFileName string) *sql.DB {
+	db, err := sql.Open("duckdb", dbFileName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -24,8 +25,12 @@ func createDB() *sql.DB {
 }
 
 func main() {
+	// ENVs
+	port := getEnv("AFTERHEE_PORT", "8080")
+	dbFileName := getEnv("AFTERHEE_DUCKDB_FILENAME", "database/db.duckdb")
+
 	// Dependencies
-	db := createDB()
+	db := createDB(dbFileName)
 	defer db.Close()
 
 	schoolRepository := repository.NewSchoolRepository(db)
@@ -43,6 +48,16 @@ func main() {
 	v1 := api.Group("/v1")
 	v1.Get("/schools", schoolController.List)
 
-	log.Println("listening on :3000")
-	app.Listen(":3000")
+	log.Println("listening on :" + port)
+	app.Listen(":" + port)
+}
+
+func getEnv(envKey string, fallback string) string {
+	envValue := os.Getenv(envKey)
+
+	if envValue == "" {
+		return fallback
+	}
+
+	return envValue
 }
