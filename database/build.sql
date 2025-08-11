@@ -1,0 +1,32 @@
+CREATE TABLE IF NOT EXISTS schools AS
+SELECT
+    ROW_NUMBER() OVER () AS Id,
+    "시도교육청코드"         AS SidoEduOfficeCode,
+    "시도교육청명"           AS SidoEduOfficeName,
+    "행정표준코드"           AS AdminStandardCode,
+    "학교명"                 AS SchoolName,
+    "영문학교명"             AS SchoolNameEng,
+    "학교종류명"             AS SchoolTypeName,
+    "시도명"                 AS SidoName,
+    "관할조직명"             AS JurisdictionOrgName,
+    "설립명"                 AS EstablishmentName,
+    "도로명우편번호"         AS RoadZipCode,
+    "도로명주소"             AS RoadAddress,
+    "도로명상세주소"         AS RoadDetailAddress,
+    "전화번호"               AS PhoneNumber,
+    "홈페이지주소"           AS HomepageURL,
+    "남녀공학구분명"         AS GenderMixTypeName,
+    "팩스번호"               AS FaxNumber,
+    "고등학교구분명"         AS HighSchoolTypeName,
+    "산업체특별학급존재여부" AS IndustrySpecialClassYN,
+    "고등학교일반전문구분명" AS HighSchoolGeneralSpecName,
+    "특수목적고등학교계열명" AS SpecialPurposeHSCategory,
+    "입시전후기구분명"       AS EntranceTermType,
+    "주야구분명"             AS DayNightType,
+    "설립일자"               AS EstablishedAt,
+    "개교기념일"             AS FoundedAt,
+    "수정일자"               AS ModifiedAt
+FROM read_csv('school_basic_information_20250731.csv',
+    header = true,
+    dateformat='%Y%m%d'
+);
