@@ -8,8 +8,11 @@ import (
 	"log"
 	"os"
 
+	_ "0tak2/afterhee-server/docs"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/swagger"
 	_ "github.com/marcboeker/go-duckdb/v2"
 )
 
@@ -24,6 +27,11 @@ func createDB(dbFileName string) *sql.DB {
 	return db
 }
 
+// @title AfterHee API
+// @version 1.0
+// @description 희그 그 이후 API
+// @host localhost:8080
+// @BasePath /
 func main() {
 	// ENVs
 	port := getEnv("AFTERHEE_PORT", "8080")
@@ -41,6 +49,7 @@ func main() {
 	app := fiber.New()
 	app.Use(logger.New())
 	app.Static("/static", "./static")
+	app.Get("/swagger/*", swagger.HandlerDefault) // default
 
 	// API Group
 	api := app.Group("/api")

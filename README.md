@@ -16,7 +16,13 @@ popd
 ## Instruction
 
 ```sh
-go run server.go
+go run .
+```
+
+## Update Swagger Document
+
+```sh
+swag init # https://github.com/gofiber/swagger?tab=readme-ov-file#usage
 ```
 
 ## Envirionments
