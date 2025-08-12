@@ -16,6 +16,7 @@ popd
 ## Instruction
 
 ```sh
+export AFTERHEE_NEIS_API_KEY="YOUR_NEIS_API_KEY"
 go run .
 ```
 
@@ -29,3 +30,4 @@ swag init # https://github.com/gofiber/swagger?tab=readme-ov-file#usage
 
 - `AFTERHEE_PORT`: 서버 포트. 지정하지 않으면 `8080`
 - `AFTERHEE_DUCKDB_FILENAME`: DuckDB 파일 경로. 지정하지 않으면 `database/db.duckdb`
+- `AFTERHEE_NEIS_API_KEY`: NEIS API 키. [나이스 교육정보 개방 포털](https://open.neis.go.kr/)에서 발급

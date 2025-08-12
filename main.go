@@ -3,6 +3,7 @@ package main
 import (
 	"0tak2/afterhee-server/configuration"
 	"0tak2/afterhee-server/controller"
+	"0tak2/afterhee-server/network"
 	"0tak2/afterhee-server/repository"
 	"0tak2/afterhee-server/service"
 	"database/sql"
@@ -41,7 +42,8 @@ func main() {
 	defer db.Close()
 
 	schoolRepository := repository.NewSchoolRepository(db)
-	schoolService := service.NewSchoolService(schoolRepository)
+	neisNetworkRequest := network.NewNEISMealRequest()
+	schoolService := service.NewSchoolService(schoolRepository, neisNetworkRequest)
 	schoolController := controller.NewSchoolController(schoolService)
 
 	// App
@@ -55,6 +57,7 @@ func main() {
 
 	v1 := api.Group("/v1")
 	v1.Get("/schools", schoolController.List)
+	v1.Get("/schools/meals", schoolController.ListMeals)
 
 	log.Println("listening on :" + config.Port)
 	app.Listen(":" + config.Port)

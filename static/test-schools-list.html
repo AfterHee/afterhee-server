@@ -36,7 +36,7 @@
                     const list = document.createElement('ul');
                     data.forEach(school => {
                         const li = document.createElement('li');
-                        li.textContent = `[${school.adminStandardCode}] ${school.schoolName} (${school.roadAddress} ${school.roadDetailAddress})`;
+                        li.textContent = `[${school.sidoEduOfficeName}] [${school.adminStandardCode}] ${school.schoolName} (${school.roadAddress} ${school.roadDetailAddress})`;
                         list.appendChild(li);
                     });
                     resultDiv.appendChild(list);

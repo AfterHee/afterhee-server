@@ -52,7 +52,7 @@ func NewSchoolRepository(db *sql.DB) SchoolRepository {
 
 func (r schoolRepository) FetchSchools(keyword string) ([]SchoolModel, error) {
 	rows, err := r.db.Query(`
-		SELECT Id, SchoolName, AdminStandardCode, RoadAddress, RoadDetailAddress
+		SELECT Id, SidoEduOfficeCode, SidoEduOfficeName, SchoolName, AdminStandardCode, RoadAddress, RoadDetailAddress
 		FROM schools
 		WHERE SchoolName LIKE ?`,
 		"%"+keyword+"%",
@@ -65,7 +65,7 @@ func (r schoolRepository) FetchSchools(keyword string) ([]SchoolModel, error) {
 	var schools []SchoolModel
 	for rows.Next() {
 		var s SchoolModel
-		if err := rows.Scan(&s.Id, &s.SchoolName, &s.AdminStandardCode, &s.RoadAddress, &s.RoadDetailAddress); err != nil {
+		if err := rows.Scan(&s.Id, &s.SidoEduOfficeCode, &s.SidoEduOfficeName, &s.SchoolName, &s.AdminStandardCode, &s.RoadAddress, &s.RoadDetailAddress); err != nil {
 			return nil, err
 		}
 		schools = append(schools, s)

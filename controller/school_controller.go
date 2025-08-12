@@ -9,6 +9,7 @@ import (
 
 type SchoolContoller interface {
 	List(c *fiber.Ctx) error
+	ListMeals(c *fiber.Ctx) error
 }
 
 type schoolContoller struct {
@@ -34,6 +35,20 @@ func (ctl *schoolContoller) List(c *fiber.Ctx) error {
 	schools, err := ctl.svc.GetSchools(keyword)
 	if err != nil {
 		log.Fatalln(err)
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(schools)
+}
+
+func (ctl *schoolContoller) ListMeals(c *fiber.Ctx) error {
+	eduOfficeCode := c.Query("eduOfficeCode")
+	schoolCode := c.Query("schoolCode")
+	year := c.Query(("year"))
+	month := c.Query(("month"))
+
+	schools, err := ctl.svc.GetMealPlans(eduOfficeCode, schoolCode, year, month)
+	if err != nil {
+		log.Println(err)
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(schools)
