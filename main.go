@@ -1,12 +1,12 @@
 package main
 
 import (
+	"0tak2/afterhee-server/configuration"
 	"0tak2/afterhee-server/controller"
 	"0tak2/afterhee-server/repository"
 	"0tak2/afterhee-server/service"
 	"database/sql"
 	"log"
-	"os"
 
 	_ "0tak2/afterhee-server/docs"
 
@@ -33,12 +33,11 @@ func createDB(dbFileName string) *sql.DB {
 // @host localhost:8080
 // @BasePath /
 func main() {
-	// ENVs
-	port := getEnv("AFTERHEE_PORT", "8080")
-	dbFileName := getEnv("AFTERHEE_DUCKDB_FILENAME", "database/db.duckdb")
+	// Load configuration
+	config := configuration.GetConfiguration()
 
 	// Dependencies
-	db := createDB(dbFileName)
+	db := createDB(config.DBPath)
 	defer db.Close()
 
 	schoolRepository := repository.NewSchoolRepository(db)
@@ -57,16 +56,6 @@ func main() {
 	v1 := api.Group("/v1")
 	v1.Get("/schools", schoolController.List)
 
-	log.Println("listening on :" + port)
-	app.Listen(":" + port)
-}
-
-func getEnv(envKey string, fallback string) string {
-	envValue := os.Getenv(envKey)
-
-	if envValue == "" {
-		return fallback
-	}
-
-	return envValue
+	log.Println("listening on :" + config.Port)
+	app.Listen(":" + config.Port)
 }
