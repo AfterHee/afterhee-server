@@ -1,1 +1,2 @@
 database/db.duckdb
+export_envs.sh

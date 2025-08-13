@@ -38,10 +38,87 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/service.School"
-                            }
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.CommonResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/service.School"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/schools/meals": {
+            "get": {
+                "description": "특정 학교의 월별 식단표를 제공한다",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "식단표 조회",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "시도교육청코드",
+                        "name": "eduOfficeCode",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "학교 행정표준코드",
+                        "name": "schoolCode",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "요청하려는 연도 (YYYY)",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "요청하려는 달 (MM)",
+                        "name": "month",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.CommonResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/service.Meal"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -49,6 +126,68 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "controller.CommonResponse": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "isError": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.Meal": {
+            "type": "object",
+            "properties": {
+                "calInfo": {
+                    "type": "string"
+                },
+                "dishName": {
+                    "type": "string"
+                },
+                "loadDtm": {
+                    "type": "string"
+                },
+                "mlsvFgr": {
+                    "type": "number"
+                },
+                "mlsvFromYmd": {
+                    "type": "string"
+                },
+                "mlsvToYmd": {
+                    "type": "string"
+                },
+                "mlsvYmd": {
+                    "type": "string"
+                },
+                "mmealScCode": {
+                    "type": "string"
+                },
+                "mmealScNm": {
+                    "type": "string"
+                },
+                "ntrInfo": {
+                    "type": "string"
+                },
+                "orplcInfo": {
+                    "type": "string"
+                },
+                "schoolAdminCode": {
+                    "type": "string"
+                },
+                "schoolName": {
+                    "type": "string"
+                },
+                "sidoEduOfficeCode": {
+                    "type": "string"
+                },
+                "sidoEduOfficeName": {
+                    "type": "string"
+                }
+            }
+        },
         "service.School": {
             "type": "object",
             "properties": {
@@ -65,6 +204,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "schoolName": {
+                    "type": "string"
+                },
+                "sidoEduOfficeCode": {
+                    "type": "string"
+                },
+                "sidoEduOfficeName": {
                     "type": "string"
                 }
             }

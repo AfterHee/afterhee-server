@@ -47,7 +47,9 @@ func main() {
 	schoolController := controller.NewSchoolController(schoolService)
 
 	// App
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		ErrorHandler: controller.GlobalErrorHandler,
+	})
 	app.Use(logger.New())
 	app.Static("/static", "./static")
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
