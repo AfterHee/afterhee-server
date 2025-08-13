@@ -1,5 +1,46 @@
 basePath: /
 definitions:
+  controller.CommonResponse:
+    properties:
+      data: {}
+      isError:
+        type: boolean
+      message:
+        type: string
+    type: object
+  service.Meal:
+    properties:
+      calInfo:
+        type: string
+      dishName:
+        type: string
+      loadDtm:
+        type: string
+      mlsvFgr:
+        type: number
+      mlsvFromYmd:
+        type: string
+      mlsvToYmd:
+        type: string
+      mlsvYmd:
+        type: string
+      mmealScCode:
+        type: string
+      mmealScNm:
+        type: string
+      ntrInfo:
+        type: string
+      orplcInfo:
+        type: string
+      schoolAdminCode:
+        type: string
+      schoolName:
+        type: string
+      sidoEduOfficeCode:
+        type: string
+      sidoEduOfficeName:
+        type: string
+    type: object
   service.School:
     properties:
       adminStandardCode:
@@ -11,6 +52,10 @@ definitions:
       roadDetailAddress:
         type: string
       schoolName:
+        type: string
+      sidoEduOfficeCode:
+        type: string
+      sidoEduOfficeName:
         type: string
     type: object
 host: localhost:8080
@@ -37,8 +82,54 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/service.School'
-            type: array
+            allOf:
+            - $ref: '#/definitions/controller.CommonResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/service.School'
+                  type: array
+              type: object
       summary: 학교 목록 조회
+  /api/v1/schools/meals:
+    get:
+      consumes:
+      - application/json
+      description: 특정 학교의 월별 식단표를 제공한다
+      parameters:
+      - description: 시도교육청코드
+        in: query
+        name: eduOfficeCode
+        required: true
+        type: string
+      - description: 학교 행정표준코드
+        in: query
+        name: schoolCode
+        required: true
+        type: string
+      - description: 요청하려는 연도 (YYYY)
+        in: query
+        name: year
+        required: true
+        type: string
+      - description: 요청하려는 달 (MM)
+        in: query
+        name: month
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.CommonResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/service.Meal'
+                  type: array
+              type: object
+      summary: 식단표 조회
 swagger: "2.0"
