@@ -13,6 +13,7 @@ type CommonResponse struct {
 }
 
 var errorMessageForStatusCode = map[int]string{
+	fiber.StatusOK:                  "요청을 잘 수행했습니다",
 	fiber.StatusBadRequest:          "잘못된 요청입니다",
 	fiber.StatusInternalServerError: "오류가 발생했습니다",
 }
