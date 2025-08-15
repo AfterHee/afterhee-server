@@ -144,8 +144,11 @@ const docTemplate = `{
                 "calInfo": {
                     "type": "string"
                 },
-                "dishName": {
-                    "type": "string"
+                "dishNames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "loadDtm": {
                     "type": "string"

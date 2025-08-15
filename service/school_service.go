@@ -19,21 +19,21 @@ type School struct {
 }
 
 type Meal struct {
-	SidoEduOfficeCode string  `json:"sidoEduOfficeCode"`
-	SidoEduOfficeName string  `json:"sidoEduOfficeName"`
-	SchoolAdminCode   string  `json:"schoolAdminCode"`
-	SchoolName        string  `json:"schoolName"`
-	MmealScCode       string  `json:"mmealScCode"`
-	MmealScNm         string  `json:"mmealScNm"`
-	MlsvYmd           string  `json:"mlsvYmd"`
-	MlsvFgr           float32 `json:"mlsvFgr"`
-	DishName          string  `json:"dishName"`
-	OrplcInfo         string  `json:"orplcInfo"`
-	CalInfo           string  `json:"calInfo"`
-	NtrInfo           string  `json:"ntrInfo"`
-	MlsvFromYmd       string  `json:"mlsvFromYmd"`
-	MlsvToYmd         string  `json:"mlsvToYmd"`
-	LoadDtm           string  `json:"loadDtm"`
+	SidoEduOfficeCode string   `json:"sidoEduOfficeCode"`
+	SidoEduOfficeName string   `json:"sidoEduOfficeName"`
+	SchoolAdminCode   string   `json:"schoolAdminCode"`
+	SchoolName        string   `json:"schoolName"`
+	MmealScCode       string   `json:"mmealScCode"`
+	MmealScNm         string   `json:"mmealScNm"`
+	MlsvYmd           string   `json:"mlsvYmd"`
+	MlsvFgr           float32  `json:"mlsvFgr"`
+	DishName          []string `json:"dishNames"`
+	OrplcInfo         string   `json:"orplcInfo"`
+	CalInfo           string   `json:"calInfo"`
+	NtrInfo           string   `json:"ntrInfo"`
+	MlsvFromYmd       string   `json:"mlsvFromYmd"`
+	MlsvToYmd         string   `json:"mlsvToYmd"`
+	LoadDtm           string   `json:"loadDtm"`
 }
 
 // Service
@@ -65,12 +65,12 @@ func (s schoolService) GetSchools(keyword string) ([]School, error) {
 	for _, schoolModel := range result {
 		schools = append(schools, School{
 			Id:                schoolModel.Id,
-			SidoEduOfficeCode: nilToEmptyString(schoolModel.SidoEduOfficeCode),
-			SidoEduOfficeName: nilToEmptyString(schoolModel.SidoEduOfficeName),
-			AdminStandardCode: nilToEmptyString(schoolModel.AdminStandardCode),
-			SchoolName:        nilToEmptyString(schoolModel.SchoolName),
-			RoadAddress:       nilToEmptyString(schoolModel.RoadAddress),
-			RoadDetailAddress: nilToEmptyString(schoolModel.RoadDetailAddress),
+			SidoEduOfficeCode: NilToEmptyString(schoolModel.SidoEduOfficeCode),
+			SidoEduOfficeName: NilToEmptyString(schoolModel.SidoEduOfficeName),
+			AdminStandardCode: NilToEmptyString(schoolModel.AdminStandardCode),
+			SchoolName:        NilToEmptyString(schoolModel.SchoolName),
+			RoadAddress:       NilToEmptyString(schoolModel.RoadAddress),
+			RoadDetailAddress: NilToEmptyString(schoolModel.RoadDetailAddress),
 		})
 	}
 
@@ -101,7 +101,7 @@ func (s schoolService) GetMealPlans(sidoEduOfficeCode string, schoolStandardCode
 			MmealScNm:         row.MmealScNm,
 			MlsvYmd:           row.MlsvYmd,
 			MlsvFgr:           row.MlsvFgr,
-			DishName:          row.DdishNm,
+			DishName:          ExtractMenus(row.DdishNm),
 			OrplcInfo:         row.OrplcInfo,
 			CalInfo:           row.CalInfo,
 			NtrInfo:           row.NtrInfo,
@@ -111,12 +111,4 @@ func (s schoolService) GetMealPlans(sidoEduOfficeCode string, schoolStandardCode
 		})
 	}
 	return meals, err
-}
-
-func nilToEmptyString(nilOrString *string) string {
-	if nilOrString != nil {
-		return *nilOrString
-	}
-
-	return ""
 }

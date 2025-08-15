@@ -12,8 +12,10 @@ definitions:
     properties:
       calInfo:
         type: string
-      dishName:
-        type: string
+      dishNames:
+        items:
+          type: string
+        type: array
       loadDtm:
         type: string
       mlsvFgr:
