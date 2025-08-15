@@ -1,0 +1,55 @@
+services:
+  afterhee-nginx:
+    image: nginx:1.27-alpine
+    container_name: afterhee-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - afterhee1
+      - afterhee2
+      - afterhee3
+    networks:
+      - afterhee-network
+    restart: unless-stopped
+
+  afterhee1:
+    image: afterhee:latest
+    container_name: afterhee1
+    environment:
+      AFTERHEE_PORT: ${AFTERHEE_PORT:-8080}
+      AFTERHEE_NEIS_API_KEY: ${AFTERHEE_NEIS_API_KEY}
+    expose:
+      - "8080"
+    networks:
+      - afterhee-network
+    restart: unless-stopped
+
+  afterhee2:
+    image: afterhee:latest
+    container_name: afterhee2
+    environment:
+      AFTERHEE_PORT: ${AFTERHEE_PORT:-8080}
+      AFTERHEE_NEIS_API_KEY: ${AFTERHEE_NEIS_API_KEY}
+    expose:
+      - "8080"
+    networks:
+      - afterhee-network
+    restart: unless-stopped
+
+  afterhee3:
+    image: afterhee:latest
+    container_name: afterhee3
+    environment:
+      AFTERHEE_PORT: ${AFTERHEE_PORT:-8080}
+      AFTERHEE_NEIS_API_KEY: ${AFTERHEE_NEIS_API_KEY}
+    expose:
+      - "8080"
+    networks:
+      - afterhee-network
+    restart: unless-stopped
+
+networks:
+  afterhee-network:
+    driver: bridge
