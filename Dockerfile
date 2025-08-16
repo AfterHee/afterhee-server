@@ -39,6 +39,9 @@ FROM debian:bookworm-slim
 
 WORKDIR /app
 
+RUN apt update \
+ && apt install -y ca-certificates
+
 COPY --from=build /build/out/afterhee /app/afterhee
 COPY --from=build /build/database /app/database
 
