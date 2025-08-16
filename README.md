@@ -45,6 +45,9 @@ go test ./...
 ```sh
 docker build -t afterhee:latest -t afterhee:v0.0.1 .
 
+# 서버용 빌드
+docker build --platform linux/amd64 -t afterhee:latest -t afterhee:v0.0.1 .
+
 # podman
 podman build -t afterhee:latest -t afterhee:v0.0.1 .
 ```
