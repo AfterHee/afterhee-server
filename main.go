@@ -55,7 +55,11 @@ func main() {
 		ErrorHandler: controller.GlobalErrorHandler,
 	})
 	app.Use(logger.New())
-	app.Static("/static", "./static")
+
+	if config.IsDevMode {
+		app.Static("/static", "./static")
+	}
+
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
 
 	// API Group
