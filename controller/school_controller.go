@@ -33,6 +33,11 @@ func NewSchoolController(svc service.SchoolService) SchoolContoller {
 func (ctl *schoolContoller) List(c *fiber.Ctx) error {
 	keyword := c.Query("keyword")
 
+	// Validate Request
+	if keyword == "" {
+		return ErrorOf(fiber.StatusBadRequest, "40000", MessageOfCode(fiber.StatusBadRequest))
+	}
+
 	schools, err := ctl.svc.GetSchools(keyword)
 	if err != nil {
 		log.Println(err)
@@ -59,6 +64,16 @@ func (ctl *schoolContoller) ListMeals(c *fiber.Ctx) error {
 	from := c.Query(("from"))
 	to := c.Query(("to"))
 
+	// Validate Request
+	if eduOfficeCode == "" || schoolCode == "" || from == "" || to == "" {
+		return ErrorOf(fiber.StatusBadRequest, "40000", MessageOfCode(fiber.StatusBadRequest))
+	}
+
+	fromTime, fromTimeErr := time.Parse("2006-01-02", from)
+	toTime, toTimeErr := time.Parse("2006-01-02", to)
+	if fromTimeErr != nil || toTimeErr != nil {
+		return ErrorOf(fiber.StatusBadRequest, "40000", MessageOfCode(fiber.StatusBadRequest))
+	}
 
 	meals, err := ctl.svc.GetMealPlans(eduOfficeCode, schoolCode, fromTime, toTime)
 	if err != nil {
