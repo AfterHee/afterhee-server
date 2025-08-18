@@ -20,6 +20,8 @@ services:
     environment:
       AFTERHEE_PORT: ${AFTERHEE_PORT:-8080}
       AFTERHEE_NEIS_API_KEY: ${AFTERHEE_NEIS_API_KEY}
+      AFTERHEE_GEMINI_API_KEY: ${AFTERHEE_GEMINI_API_KEY}
+      AFTERHEE_PROFILE: ${AFTERHEE_PROFILE}
     expose:
       - "8080"
     networks:
@@ -32,6 +34,8 @@ services:
     environment:
       AFTERHEE_PORT: ${AFTERHEE_PORT:-8080}
       AFTERHEE_NEIS_API_KEY: ${AFTERHEE_NEIS_API_KEY}
+      AFTERHEE_GEMINI_API_KEY: ${AFTERHEE_GEMINI_API_KEY}
+      AFTERHEE_PROFILE: ${AFTERHEE_PROFILE}
     expose:
       - "8080"
     networks:
@@ -44,6 +48,8 @@ services:
     environment:
       AFTERHEE_PORT: ${AFTERHEE_PORT:-8080}
       AFTERHEE_NEIS_API_KEY: ${AFTERHEE_NEIS_API_KEY}
+      AFTERHEE_GEMINI_API_KEY: ${AFTERHEE_GEMINI_API_KEY}
+      AFTERHEE_PROFILE: ${AFTERHEE_PROFILE}
     expose:
       - "8080"
     networks:
