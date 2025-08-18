@@ -8,6 +8,15 @@ definitions:
       message:
         type: string
     type: object
+  controller.SuggestMenuRequest:
+    properties:
+      category:
+        type: string
+      skipMenus:
+        items:
+          type: string
+        type: array
+    type: object
   service.Meal:
     properties:
       calInfo:
@@ -134,4 +143,29 @@ paths:
                   type: array
               type: object
       summary: 식단표 조회
+  /api/v1/suggest:
+    post:
+      consumes:
+      - application/json
+      description: 메뉴를 제안한다
+      parameters:
+      - description: request suggest menu body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.SuggestMenuRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.CommonResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/controller.SuggestMenuRequest'
+              type: object
+      summary: 메뉴 제안
 swagger: "2.0"
