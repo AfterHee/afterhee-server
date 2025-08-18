@@ -80,15 +80,15 @@
                     },
                     {
                         "type": "string",
-                        "description": "요청하려는 연도 (YYYY)",
-                        "name": "year",
+                        "description": "요청하려는 시작 일자 (YYYY-MM-DD)",
+                        "name": "from",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "요청하려는 달 (MM)",
-                        "name": "month",
+                        "description": "요청하려는 종료 일자 (YYYY-MM-DD)",
+                        "name": "to",
                         "in": "query",
                         "required": true
                     }

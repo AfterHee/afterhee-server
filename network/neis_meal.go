@@ -3,10 +3,12 @@ package network
 import (
 	"0tak2/afterhee-server/configuration"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"net/url"
+	"regexp"
 )
 
 const neisBaseURL = "https://open.neis.go.kr/hub"
@@ -16,7 +18,7 @@ type NEISMealRequest interface {
 	// schoolAdminCode 학교 행정표준코드
 	// year 요청 연도
 	// month 요청 월
-	FetchMealPlan(eduOfficeCode string, schoolAdminCode string, year string, month string) (*MealServiceDietInfoResponse, error)
+	FetchMealPlan(eduOfficeCode string, schoolAdminCode string, fromDateString string, toDateString string) (*MealServiceDietInfoResponse, error)
 }
 
 type neisMealRequest struct {
@@ -26,8 +28,15 @@ func NewNEISMealRequest() NEISMealRequest {
 	return &neisMealRequest{}
 }
 
-func (r neisMealRequest) FetchMealPlan(eduOfficeCode string, schoolAdminCode string, year string, month string) (*MealServiceDietInfoResponse, error) {
+func (r neisMealRequest) FetchMealPlan(eduOfficeCode string, schoolAdminCode string, fromDateString string, toDateString string) (*MealServiceDietInfoResponse, error) {
 	config := configuration.GetConfiguration()
+
+	// Validate Date String
+	var dateRegex = regexp.MustCompile(`^\d{8}$`)
+
+	if !dateRegex.MatchString(fromDateString) || !dateRegex.MatchString(toDateString) {
+		return nil, fmt.Errorf("invalid date format: must be YYYYMMDD")
+	}
 
 	destination, _ := url.Parse(neisBaseURL + "/mealServiceDietInfo")
 
@@ -36,7 +45,8 @@ func (r neisMealRequest) FetchMealPlan(eduOfficeCode string, schoolAdminCode str
 	params.Add("Type", "json")
 	params.Add("ATPT_OFCDC_SC_CODE", eduOfficeCode)
 	params.Add("SD_SCHUL_CODE", schoolAdminCode)
-	params.Add("MLSV_YMD", year+month)
+	params.Add("MLSV_FROM_YMD", fromDateString)
+	params.Add("MLSV_TO_YMD", toDateString)
 
 	destination.RawQuery = params.Encode()
 

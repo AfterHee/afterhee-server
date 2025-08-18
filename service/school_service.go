@@ -5,6 +5,7 @@ import (
 	"0tak2/afterhee-server/repository"
 	"errors"
 	"log"
+	"time"
 )
 
 // Domain Entity
@@ -39,7 +40,7 @@ type Meal struct {
 // Service
 type SchoolService interface {
 	GetSchools(keyword string) ([]School, error)
-	GetMealPlans(sidoEduOfficeCode string, schoolStandardCode string, year string, month string) ([]Meal, error)
+	GetMealPlans(sidoEduOfficeCode string, schoolStandardCode string, from time.Time, to time.Time) ([]Meal, error)
 }
 
 type schoolService struct {
@@ -77,8 +78,8 @@ func (s schoolService) GetSchools(keyword string) ([]School, error) {
 	return schools, err
 }
 
-func (s schoolService) GetMealPlans(sidoEduOfficeCode string, schoolStandardCode string, year string, month string) ([]Meal, error) {
-	result, err := s.neis.FetchMealPlan(sidoEduOfficeCode, schoolStandardCode, year, month)
+func (s schoolService) GetMealPlans(sidoEduOfficeCode string, schoolStandardCode string, from time.Time, to time.Time) ([]Meal, error) {
+	result, err := s.neis.FetchMealPlan(sidoEduOfficeCode, schoolStandardCode, timeToString(from), timeToString((to)))
 	if err != nil {
 		return nil, err
 	}
@@ -111,4 +112,8 @@ func (s schoolService) GetMealPlans(sidoEduOfficeCode string, schoolStandardCode
 		})
 	}
 	return meals, err
+}
+
+func timeToString(time time.Time) string {
+	return time.Format("20060102")
 }
