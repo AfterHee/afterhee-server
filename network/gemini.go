@@ -65,6 +65,8 @@ func (r geminiRequest) requestToGemini(prompt string) (*GeminiMenuRecommendation
 		},
 	}
 
+	log.Println("will send prediction request to gemini with: " + prompt)
+
 	result, err := client.Models.GenerateContent(
 		ctx,
 		"gemini-2.5-flash",
@@ -77,6 +79,8 @@ func (r geminiRequest) requestToGemini(prompt string) (*GeminiMenuRecommendation
 	}
 
 	var rawResponse string = result.Text()
+	log.Println("received response from gemini... response: " + rawResponse)
+
 	var response GeminiMenuRecommendation
 	json.Unmarshal([]byte(rawResponse), &response)
 
