@@ -109,14 +109,14 @@ paths:
         name: schoolCode
         required: true
         type: string
-      - description: 요청하려는 연도 (YYYY)
+      - description: 요청하려는 시작 일자 (YYYY-MM-DD)
         in: query
-        name: year
+        name: from
         required: true
         type: string
-      - description: 요청하려는 달 (MM)
+      - description: 요청하려는 종료 일자 (YYYY-MM-DD)
         in: query
-        name: month
+        name: to
         required: true
         type: string
       produces:
