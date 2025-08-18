@@ -24,19 +24,19 @@
                     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
                     return res.json();
                 })
-                .then(data => {
+                .then(json => {
                     const resultDiv = document.getElementById('school-search-result');
                     resultDiv.innerHTML = '';
 
-                    if (data.length === 0) {
+                    if (json.length === 0) {
                         resultDiv.textContent = '검색 결과가 없습니다.';
                         return;
                     }
 
                     const list = document.createElement('ul');
-                    data.forEach(school => {
+                    json.data.forEach(school => {
                         const li = document.createElement('li');
-                        li.textContent = `[${school.sidoEduOfficeName}] [${school.adminStandardCode}] ${school.schoolName} (${school.roadAddress} ${school.roadDetailAddress})`;
+                        li.textContent = `[${school.sidoEduOfficeName} / ${school.sidoEduOfficeCode}] [${school.adminStandardCode}] ${school.schoolName} (${school.roadAddress} ${school.roadDetailAddress})`;
                         list.appendChild(li);
                     });
                     resultDiv.appendChild(list);

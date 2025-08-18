@@ -5,6 +5,7 @@ import (
 	"0tak2/afterhee-server/repository"
 	"errors"
 	"log"
+	"sort"
 	"time"
 )
 
@@ -75,7 +76,11 @@ func (s schoolService) GetSchools(keyword string) ([]School, error) {
 		})
 	}
 
-	return schools, err
+	sort.Slice(schools, func(i, j int) bool {
+		return schools[i].Id < schools[j].Id
+	})
+
+	return schools, nil
 }
 
 func (s schoolService) GetMealPlans(sidoEduOfficeCode string, schoolStandardCode string, from time.Time, to time.Time) ([]Meal, error) {
@@ -111,7 +116,12 @@ func (s schoolService) GetMealPlans(sidoEduOfficeCode string, schoolStandardCode
 			LoadDtm:           row.LoadDtm,
 		})
 	}
-	return meals, err
+
+	sort.Slice(meals, func(i, j int) bool {
+		return meals[i].MlsvYmd < meals[j].MlsvYmd
+	})
+
+	return meals, nil
 }
 
 func timeToString(time time.Time) string {

@@ -31,6 +31,8 @@ swag init # https://github.com/gofiber/swagger?tab=readme-ov-file#usage
 - `AFTERHEE_PORT`: 서버 포트. 지정하지 않으면 `8080`
 - `AFTERHEE_DUCKDB_FILENAME`: DuckDB 파일 경로. 지정하지 않으면 `database/db.duckdb`
 - `AFTERHEE_NEIS_API_KEY`: NEIS API 키. [나이스 교육정보 개방 포털](https://open.neis.go.kr/)에서 발급
+- `AFTERHEE_GEMINI_API_KEY`: Gemini API 키.
+- `AFTERHEE_PROFILE`: 서버 모드. `PRODUCTION`이면 운영모드. `DEV`이면 개발모드.
 
 ## Test
 

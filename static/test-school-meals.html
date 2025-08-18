@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Meals API Test</title>
+</head>
+<body>
+    <h1>식단표 조회 테스트</h1>
+
+    <input id="edu-office-code" type="text" placeholder="시도교육청코드 (예: J10)" />
+    <input id="school-code" type="text" placeholder="학교 행정표준코드 (예: 7010569)" />
+    <input id="from-date" type="date" />
+    <input id="to-date" type="date" />
+    <button id="meals-search-btn">조회</button>
+
+    <div id="meals-search-result"></div>
+
+    <script>
+        document.getElementById('meals-search-btn').addEventListener('click', () => {
+            const eduOfficeCode = document.getElementById('edu-office-code').value.trim();
+            const schoolCode = document.getElementById('school-code').value.trim();
+            const fromDate = document.getElementById('from-date').value;
+            const toDate = document.getElementById('to-date').value;
+
+            if (!eduOfficeCode || !schoolCode || !fromDate || !toDate) {
+                alert('모든 값을 입력하세요.');
+                return;
+            }
+
+            const query = `eduOfficeCode=${encodeURIComponent(eduOfficeCode)}&schoolCode=${encodeURIComponent(schoolCode)}&from=${encodeURIComponent(fromDate)}&to=${encodeURIComponent(toDate)}`;
+
+            fetch(`/api/v1/schools/meals?${query}`)
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                    return res.json();
+                })
+                .then(json => {
+                    const resultDiv = document.getElementById('meals-search-result');
+                    resultDiv.innerHTML = '';
+
+                    const meals = json.data;
+                    if (!meals || meals.length === 0) {
+                        resultDiv.textContent = '검색 결과가 없습니다.';
+                        return;
+                    }
+
+                    const list = document.createElement('ul');
+                    meals.forEach(meal => {
+                        const li = document.createElement('li');
+                        li.textContent = `[${meal.mlsvYmd}] (${meal.mmealScNm}) ${meal.dishNames}`;
+                        list.appendChild(li);
+                    });
+                    resultDiv.appendChild(list);
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('API 호출 중 오류가 발생했습니다.');
+                });
+        });
+    </script>
+</body>
+</html>
