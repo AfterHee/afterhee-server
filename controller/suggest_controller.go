@@ -13,9 +13,14 @@ type SuggestMenuRequest struct {
 	SkipMenus []string
 }
 
+type SuggestTestRequest struct {
+	Prompt string
+}
+
 // Controller Types
 type SuggestContoller interface {
 	Suggest(c *fiber.Ctx) error
+	SuggestTest(c *fiber.Ctx) error
 }
 
 type suggestContoller struct {
@@ -58,6 +63,39 @@ func (ctl *suggestContoller) Suggest(c *fiber.Ctx) error {
 		Category:  request.Category,
 		SkipMenus: request.SkipMenus,
 	})
+
+	if err != nil {
+		log.Println(err)
+		return ErrorOf(fiber.StatusInternalServerError, "50000", MessageOfCode(fiber.StatusInternalServerError))
+	}
+
+	return UTF8Json(c, ResponseOfCode(false, fiber.StatusOK, menu))
+}
+
+// SuggestTest godoc
+//
+//	@Summary		메뉴 제안
+//	@Description	메뉴를 제안한다
+//	@Accept			json
+//	@Produce		json
+//	@Param request body SuggestTestRequest true "request suggest menu body"
+//	@Success 200 {object} controller.CommonResponse{data=controller.SuggestMenuRequest}
+//	@Router			/api/v1/test/suggest [post]
+func (ctl *suggestContoller) SuggestTest(c *fiber.Ctx) error {
+	var request SuggestTestRequest
+
+	if err := c.BodyParser(&request); err != nil {
+		log.Println("failed to parse request body... " + err.Error())
+		return err
+	}
+
+	// Validate Request
+	if request.Prompt == "" {
+		log.Println("prompt is empty...")
+		return ErrorOf(fiber.StatusBadRequest, "40000", MessageOfCode(fiber.StatusBadRequest))
+	}
+
+	menu, err := ctl.svc.GetMenuRecommendationWithCustomPrompt(request.Prompt)
 
 	if err != nil {
 		log.Println(err)

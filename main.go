@@ -66,6 +66,10 @@ func main() {
 	v1.Get("/schools/meals", schoolController.ListMeals)
 	v1.Post("/suggest", suggestController.Suggest)
 
+	if config.IsDevMode {
+		v1.Post("/test/suggest", suggestController.SuggestTest)
+	}
+
 	log.Println("listening on :" + config.Port)
 	app.Listen(":" + config.Port)
 }

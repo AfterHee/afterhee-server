@@ -6,10 +6,11 @@ import (
 )
 
 const (
-	portKey      = "AFTERHEE_PORT"
-	dbPathKey    = "AFTERHEE_DUCKDB_FILENAME"
-	neisAPIKey   = "AFTERHEE_NEIS_API_KEY"
-	geminiAPIKey = "AFTERHEE_GEMINI_API_KEY"
+	portKey        = "AFTERHEE_PORT"
+	dbPathKey      = "AFTERHEE_DUCKDB_FILENAME"
+	neisAPIKey     = "AFTERHEE_NEIS_API_KEY"
+	geminiAPIKey   = "AFTERHEE_GEMINI_API_KEY"
+	runningProfile = "AFTERHEE_PROFILE"
 )
 
 type Configuration struct {
@@ -17,6 +18,7 @@ type Configuration struct {
 	DBPath       string
 	NEISAPIKey   string
 	GeminiAPIKey string
+	IsDevMode    bool
 }
 
 func GetConfiguration() Configuration {
@@ -25,6 +27,7 @@ func GetConfiguration() Configuration {
 		DBPath:       getEnv(dbPathKey, "database/db.duckdb"),
 		NEISAPIKey:   getEnv(neisAPIKey, ""),
 		GeminiAPIKey: getEnv(geminiAPIKey, ""),
+		IsDevMode:    getEnv(runningProfile, "PRODUCTION") == "DEV",
 	}
 }
 
