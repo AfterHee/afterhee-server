@@ -43,6 +43,7 @@ RUN apt update \
  && apt install -y ca-certificates
 
 COPY --from=build /build/out/afterhee /app/afterhee
+COPY --from=build /build/static /app/static
 COPY --from=build /build/database /app/database
 
 EXPOSE 8080
