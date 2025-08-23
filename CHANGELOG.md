@@ -19,11 +19,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.0.2] - 2025-08-23
+
+### Changed
+
+- 카테고리 픽스 (#16)
+- 내부 프롬프팅 개선
+
 ## [0.0.1] - 2025-08-18
 
 ### Added
 
 - 기본 엔드포인트 구현
 
-[unreleased]: hhttps://github.com/DeveloperAcademy-POSTECH/2025-C3-A5-ChickCream/compare/v0.0.1...HEAD
-[0.0.1]: hhttps://github.com/DeveloperAcademy-POSTECH/2025-C3-A5-ChickCream/releases/tag/v0.0.1
+[unreleased]: https://github.com/AfterHee/afterhee-server/compare/v0.0.2...HEAD
+[0.0.2]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.2
+[0.0.1]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.1
