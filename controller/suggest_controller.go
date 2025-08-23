@@ -34,7 +34,7 @@ func NewSuggestController(svc service.GeminiService) SuggestContoller {
 // Suggest godoc
 //
 //	@Summary		메뉴 제안
-//	@Description	메뉴를 제안한다
+//	@Description	메뉴를 제안한다. category는 다음만 허용한다: "한식", "일식", "중식", "양식", "아시안", "세계음식", "찜", "국물", "볶음", "밥", "면", "빵", "해물", "고기", "야채", "빠른 식사", "디저트",
 //	@Accept			json
 //	@Produce		json
 //	@Param request body SuggestMenuRequest true "request suggest menu body"
@@ -74,8 +74,8 @@ func (ctl *suggestContoller) Suggest(c *fiber.Ctx) error {
 
 // SuggestTest godoc
 //
-//	@Summary		메뉴 제안
-//	@Description	메뉴를 제안한다
+//	@Summary		매뉴얼 프롬프트 테스팅
+//	@Description	프롬프트로 LLM에 요청을 보낸다.
 //	@Accept			json
 //	@Produce		json
 //	@Param request body SuggestTestRequest true "request suggest menu body"
@@ -109,8 +109,8 @@ func (ctl *suggestContoller) SuggestTest(c *fiber.Ctx) error {
 func validateCategory(rawCategory string) bool {
 	allowCategories := []string{
 		"한식", "일식", "중식", "양식", "아시안",
-		"세계음식", "찜", "국물", "볶음", "밥요리",
-		"면요리", "빵", "해물", "고기", "야채",
+		"세계음식", "찜", "국물", "볶음", "밥",
+		"면", "빵", "해물", "고기", "야채",
 		"빠른 식사", "디저트",
 	}
 
