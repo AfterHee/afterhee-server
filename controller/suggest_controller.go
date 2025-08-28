@@ -128,7 +128,7 @@ func validateSkipMenus(rawSkipMenus []string) bool {
 	maxLength := 30
 
 	for _, inputMenu := range rawSkipMenus {
-		if len(inputMenu) > maxLength {
+		if len([]rune(inputMenu)) > maxLength {
 			return false
 		}
 	}
