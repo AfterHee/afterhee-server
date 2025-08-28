@@ -49,12 +49,12 @@ func (ctl *suggestContoller) Suggest(c *fiber.Ctx) error {
 	}
 
 	// Validate Request
-	if !validateCategory(request.Category) {
+	if !ValidateCategory(request.Category) {
 		log.Println("not pre-defined category... input=" + request.Category)
 		return ErrorOf(fiber.StatusBadRequest, "40000", MessageOfCode(fiber.StatusBadRequest))
 	}
 
-	if !validateSkipMenus(request.SkipMenus) {
+	if !ValidateSkipMenus(request.SkipMenus) {
 		log.Println("so long. max length is 30...")
 		return ErrorOf(fiber.StatusBadRequest, "40000", MessageOfCode(fiber.StatusBadRequest))
 	}
@@ -106,7 +106,7 @@ func (ctl *suggestContoller) SuggestTest(c *fiber.Ctx) error {
 }
 
 // 카테고리가 정의된 카테고리인지 확인한다.
-func validateCategory(rawCategory string) bool {
+func ValidateCategory(rawCategory string) bool {
 	allowCategories := []string{
 		"한식", "일식", "중식", "양식", "아시안",
 		"세계음식", "찜", "국물", "볶음", "밥",
@@ -124,11 +124,11 @@ func validateCategory(rawCategory string) bool {
 }
 
 // 순회하면서 각 아이템의 글자 수를 확인한다. 30자 초과이면 검증에 실패한다.
-func validateSkipMenus(rawSkipMenus []string) bool {
+func ValidateSkipMenus(rawSkipMenus []string) bool {
 	maxLength := 30
 
 	for _, inputMenu := range rawSkipMenus {
-		if len(inputMenu) > maxLength {
+		if len([]rune(inputMenu)) > maxLength {
 			return false
 		}
 	}
