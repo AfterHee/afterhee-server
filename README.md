@@ -54,6 +54,12 @@ docker build --platform linux/amd64 -t afterhee:latest -t afterhee:v0.0.1 .
 podman build -t afterhee:latest -t afterhee:v0.0.1 .
 ```
 
+### Export Image
+
+```sh
+podman save --format docker-archive -o afterhee-v0.0.1.tar afterhee:v0.0.1 afterhee:latest
+```
+
 ### Replace a certain server instance
 
 ```sh
