@@ -110,7 +110,7 @@ func ValidateCategory(rawCategory string) bool {
 	allowCategories := []string{
 		"한식", "일식", "중식", "양식", "아시안",
 		"세계음식", "찜", "국물", "볶음", "밥",
-		"면", "빵", "해물", "고기", "야채",
+		"면", "빵", "해산물", "고기", "야채",
 		"빠른 식사", "디저트",
 	}
 
