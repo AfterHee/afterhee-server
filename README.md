@@ -80,3 +80,25 @@ podman compose up -d --no-deps --force-recreate "afterhee3"
 crontab -e
 * * * * * /path/to/health_check.sh
 ```
+
+### 로그 웹훅 서비스 설치
+
+```sh
+sudo cp ./nginx-loghook.sh /usr/local/bin/nginx-loghook.sh
+sudo install -m 0755 /usr/local/bin/nginx-loghook.sh /usr/local/bin/nginx-loghook.sh
+
+# 환경변수 세팅
+sudo cat >/etc/nginx-loghook.env <<'EOF'
+WEBHOOK_URL="https://discord.com/api/webhooks/xxx/yyy"
+CONTAINER="afterhee-nginx"
+PROVIDER="docker"
+RATE_LIMIT_PER_SEC="10"           # 필요 시 조정
+EOF
+sudo chmod 640 /etc/nginx-loghook.env
+
+sudo cp ./nginx-loghook.service /etc/systemd/system/nginx-loghook.service
+
+# 서비스 시작
+sudo systemctl daemon-reload
+sudo systemctl enable --now nginx-loghook
+```

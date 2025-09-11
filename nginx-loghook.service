@@ -1,0 +1,16 @@
+[Unit]
+Description=Forward 4xx/5xx lines from nginx (docker logs) to webhook
+After=network-online.target docker.service
+Wants=network-online.target docker.service
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/nginx-loghook.env
+ExecStart=/usr/local/bin/nginx-loghook.sh
+Restart=always
+RestartSec=2
+# 전용 사용자 권장
+User=root
+
+[Install]
+WantedBy=multi-user.target
