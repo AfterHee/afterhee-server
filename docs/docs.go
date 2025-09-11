@@ -15,6 +15,20 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/healthcheck": {
+            "get": {
+                "description": "항상 HTTP 200 코드를 반환한다. 서버 상태를 체크하는 용도로 사용한다.",
+                "summary": "헬스 체크",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/schools": {
             "get": {
                 "description": "학교 목록을 키워드를 바탕으로 조회한다",
@@ -86,15 +100,15 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "요청하려는 연도 (YYYY)",
-                        "name": "year",
+                        "description": "요청하려는 시작 일자 (YYYY-MM-DD)",
+                        "name": "from",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "요청하려는 달 (MM)",
-                        "name": "month",
+                        "description": "요청하려는 종료 일자 (YYYY-MM-DD)",
+                        "name": "to",
                         "in": "query",
                         "required": true
                     }
@@ -123,6 +137,92 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/suggest": {
+            "post": {
+                "description": "메뉴를 제안한다. category는 다음만 허용한다: \"한식\", \"일식\", \"중식\", \"양식\", \"아시안\", \"세계음식\", \"찜\", \"국물\", \"볶음\", \"밥\", \"면\", \"빵\", \"해물\", \"고기\", \"야채\", \"빠른 식사\", \"디저트\",",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "메뉴 제안",
+                "parameters": [
+                    {
+                        "description": "request suggest menu body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.SuggestMenuRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.CommonResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/controller.SuggestMenuRequest"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/test/suggest": {
+            "post": {
+                "description": "프롬프트로 LLM에 요청을 보낸다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "매뉴얼 프롬프트 테스팅",
+                "parameters": [
+                    {
+                        "description": "request suggest menu body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.SuggestTestRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.CommonResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/controller.SuggestMenuRequest"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -134,6 +234,28 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "controller.SuggestMenuRequest": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "skipMenus": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "controller.SuggestTestRequest": {
+            "type": "object",
+            "properties": {
+                "prompt": {
                     "type": "string"
                 }
             }

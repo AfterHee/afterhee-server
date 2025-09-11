@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suggest API Test Page</title>
+</head>
+<body>
+    <h1>Suggest API 테스트</h1>
+
+    <!-- ---------- /api/v1/suggest ---------- -->
+    <h2>/api/v1/suggest (메뉴 제안)</h2>
+
+    <p>여기에는 기본 프롬프트가 적용됩니다.</p>
+
+    <h3>기본 프롬프트</h3>
+    <pre>
+Recommend one new menu item that falls under the following category and is not included in the exclusion menu, along with the reason. Please respond in Korean.
+
+Category: {{ .Category }}
+Exclusion Menu: {{range .SkipMenus}}{{.}}, {{end}}
+    </pre>
+    <input id="category" type="text" placeholder="카테고리 (예: 중식)" />
+    <input id="skip-menus" type="text" placeholder="제외할 메뉴 (쉼표로 구분)" />
+    <button id="suggest-btn">요청</button>
+    <pre id="suggest-result"></pre>
+
+    <hr />
+
+    <!-- ---------- /api/v1/test/suggest ---------- -->
+    <h2>/api/v1/test/suggest (테스트용 엔드포인트)</h2>
+    <textarea id="prompt" rows="6" style="width:100%;" placeholder="프롬프트 입력"></textarea>
+    <button id="test-suggest-btn">요청</button>
+    <pre id="test-suggest-result"></pre>
+
+    <script>
+        // POST /api/v1/suggest
+        document.getElementById('suggest-btn').addEventListener('click', () => {
+            const category = document.getElementById('category').value.trim();
+            const skipMenuStr = document.getElementById('skip-menus').value.trim();
+
+            if (!category) {
+                alert('category 를 입력하세요.');
+                return;
+            }
+
+            const skipMenus = skipMenuStr ? skipMenuStr.split(',').map(v => v.trim()) : [];
+            const body = { category, skipMenus };
+
+            fetch('/api/v1/suggest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            })
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                return res.json();
+            })
+            .then(json => {
+                document.getElementById('suggest-result').textContent =
+                    JSON.stringify(json, null, 2);
+            })
+            .catch(err => {
+                console.error(err);
+                alert('API 호출 중 오류가 발생했습니다.');
+            });
+        });
+
+        // POST /api/v1/test/suggest
+        document.getElementById('test-suggest-btn').addEventListener('click', () => {
+            const prompt = document.getElementById('prompt').value.trim();
+
+            if (!prompt) {
+                alert('prompt 를 입력하세요.');
+                return;
+            }
+
+            const body = { prompt };
+
+            fetch('/api/v1/test/suggest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            })
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                return res.json();
+            })
+            .then(json => {
+                document.getElementById('test-suggest-result').textContent =
+                    JSON.stringify(json, null, 2);
+            })
+            .catch(err => {
+                console.error(err);
+                alert('API 호출 중 오류가 발생했습니다.');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -3,6 +3,7 @@ package controller
 import (
 	"0tak2/afterhee-server/service"
 	"log"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -32,6 +33,11 @@ func NewSchoolController(svc service.SchoolService) SchoolContoller {
 func (ctl *schoolContoller) List(c *fiber.Ctx) error {
 	keyword := c.Query("keyword")
 
+	// Validate Request
+	if keyword == "" {
+		return ErrorOf(fiber.StatusBadRequest, "40000", MessageOfCode(fiber.StatusBadRequest))
+	}
+
 	schools, err := ctl.svc.GetSchools(keyword)
 	if err != nil {
 		log.Println(err)
@@ -48,17 +54,28 @@ func (ctl *schoolContoller) List(c *fiber.Ctx) error {
 //	@Produce		json
 //	@Param			eduOfficeCode	query	string	true	"시도교육청코드"
 //	@Param			schoolCode	query	string	true	"학교 행정표준코드"
-//	@Param			year	query	string	true	"요청하려는 연도 (YYYY)"
-//	@Param			month	query	string	true	"요청하려는 달 (MM)"
+//	@Param			from	query	string	true	"요청하려는 시작 일자 (YYYY-MM-DD)"
+//	@Param			to	query	string	true	"요청하려는 종료 일자 (YYYY-MM-DD)"
 //	@Success 200 {object} controller.CommonResponse{data=[]service.Meal}
 //	@Router			/api/v1/schools/meals [get]
 func (ctl *schoolContoller) ListMeals(c *fiber.Ctx) error {
 	eduOfficeCode := c.Query("eduOfficeCode")
 	schoolCode := c.Query("schoolCode")
-	year := c.Query(("year"))
-	month := c.Query(("month"))
+	from := c.Query(("from"))
+	to := c.Query(("to"))
 
-	meals, err := ctl.svc.GetMealPlans(eduOfficeCode, schoolCode, year, month)
+	// Validate Request
+	if eduOfficeCode == "" || schoolCode == "" || from == "" || to == "" {
+		return ErrorOf(fiber.StatusBadRequest, "40000", MessageOfCode(fiber.StatusBadRequest))
+	}
+
+	fromTime, fromTimeErr := time.Parse("2006-01-02", from)
+	toTime, toTimeErr := time.Parse("2006-01-02", to)
+	if fromTimeErr != nil || toTimeErr != nil {
+		return ErrorOf(fiber.StatusBadRequest, "40000", MessageOfCode(fiber.StatusBadRequest))
+	}
+
+	meals, err := ctl.svc.GetMealPlans(eduOfficeCode, schoolCode, fromTime, toTime)
 	if err != nil {
 		log.Println(err)
 		return ErrorOf(fiber.StatusInternalServerError, "50000", MessageOfCode(fiber.StatusInternalServerError))

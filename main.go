@@ -46,12 +46,22 @@ func main() {
 	schoolService := service.NewSchoolService(schoolRepository, neisNetworkRequest)
 	schoolController := controller.NewSchoolController(schoolService)
 
+	geminiNetworkRequest := network.NewGeminiRequest()
+	geminiService := service.NewGeminiService(geminiNetworkRequest)
+	suggestController := controller.NewSuggestController(geminiService)
+
+	healthController := controller.NewHealthController()
+
 	// App
 	app := fiber.New(fiber.Config{
 		ErrorHandler: controller.GlobalErrorHandler,
 	})
 	app.Use(logger.New())
-	app.Static("/static", "./static")
+
+	if config.IsDevMode {
+		app.Static("/static", "./static")
+	}
+
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
 
 	// API Group
@@ -60,6 +70,12 @@ func main() {
 	v1 := api.Group("/v1")
 	v1.Get("/schools", schoolController.List)
 	v1.Get("/schools/meals", schoolController.ListMeals)
+	v1.Post("/suggest", suggestController.Suggest)
+	v1.Get("/healthcheck", healthController.Check)
+
+	if config.IsDevMode {
+		v1.Post("/test/suggest", suggestController.SuggestTest)
+	}
 
 	log.Println("listening on :" + config.Port)
 	app.Listen(":" + config.Port)
