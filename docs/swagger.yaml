@@ -81,6 +81,15 @@ info:
   title: AfterHee API
   version: "1.0"
 paths:
+  /api/v1/healthcheck:
+    get:
+      description: 항상 HTTP 200 코드를 반환한다. 서버 상태를 체크하는 용도로 사용한다.
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 헬스 체크
   /api/v1/schools:
     get:
       consumes:
