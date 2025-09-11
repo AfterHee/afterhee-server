@@ -73,3 +73,10 @@ podman compose up -d --no-deps --force-recreate "afterhee1" # -> Health Check
 podman compose up -d --no-deps --force-recreate "afterhee2" # -> Health Check
 podman compose up -d --no-deps --force-recreate "afterhee3"
 ```
+
+### 서버에서 헬스체크 스크립트 1분마다 실행
+
+```
+crontab -e
+* * * * * /path/to/health_check.sh
+```
