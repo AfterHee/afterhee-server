@@ -20,6 +20,13 @@ func GlobalErrorHandler(ctx *fiber.Ctx, err error) error {
 		message = "[" + e.DetailCode + "] " + e.Message
 	}
 
+	// Case of fiber error
+	var fe *fiber.Error
+	if errors.As(err, &fe) {
+		code = fe.Code
+		message = fe.Message
+	}
+
 	ctx.Status(code)
 	return UTF8Json(ctx, ResponseOf(
 		true,
