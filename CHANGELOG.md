@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- HealthCheck 엔드포인트 추가
-
 ### Changed
 
 ### Deprecated
@@ -19,9 +17,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fiber 기본 에러를 전역 에러 핸들러가 처리하지 못하는 문제 수정
-
 ### Security
+
+## [0.0.5] - 2025-09-11
+
+### Added
+
+- HealthCheck 엔드포인트 추가
+
+### Fixed
+
+- Fiber 기본 에러를 전역 에러 핸들러가 처리하지 못하는 문제 수정
 
 ## [0.0.4] - 2025-09-07
 
@@ -48,7 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 기본 엔드포인트 구현
 
-[unreleased]: https://github.com/AfterHee/afterhee-server/compare/v0.0.4...HEAD
+[unreleased]: https://github.com/AfterHee/afterhee-server/compare/v0.0.5...HEAD
+[0.0.5]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.5
 [0.0.4]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.4
 [0.0.3]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.3
 [0.0.2]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.2
