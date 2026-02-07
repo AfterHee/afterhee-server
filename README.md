@@ -64,6 +64,14 @@ podman build --platform linux/arm64 -t afterhee:latest -t afterhee:v0.0.1 .
 podman save --format docker-archive -o afterhee-v0.0.1.tar afterhee:v0.0.1 afterhee:latest
 ```
 
+### 서버 환경에서 Redis 환경설정
+
+```sh
+cp ./containers/redis/conf/redis.conf.example ./containers/redis/conf/redis.conf
+vim ./containers/redis/conf/redis.conf
+# requirepass를 찾아 수정후 저장
+```
+
 ### Replace a certain server instance
 
 ```sh

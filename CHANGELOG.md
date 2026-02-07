@@ -11,17 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- 식단 조회 캐싱 시, TTL을 기존 3일에서 1일로 변경
-
 ### Deprecated
                                                   
 ### Removed
 
 ### Fixed
 
-- NEIS에서 반환하는 식단 정보가 빈 슬라이스여도 Redis에 저장
-
 ### Security
+
+## [0.0.8] - 2026-02-07
+
+### Changed
+
+- 식단 조회 캐싱 시, TTL을 기존 3일에서 1일로 변경
+
+### Fixed
+
+- NEIS에서 반환하는 식단 정보가 빈 슬라이스여도 Redis에 저장
 
 ## [0.0.7] - 2026-02-07
 
@@ -68,7 +74,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 기본 엔드포인트 구현
 
-[unreleased]: https://github.com/AfterHee/afterhee-server/compare/v0.0.6...HEAD
+[unreleased]: https://github.com/AfterHee/afterhee-server/compare/v0.0.8...HEAD
+[0.0.8]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.8
+[0.0.7]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.7
 [0.0.6]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.6
 [0.0.5]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.5
 [0.0.4]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.4
