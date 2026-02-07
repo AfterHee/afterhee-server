@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.0.9] - 2026-02-07
+
+### Fixed
+
+- NEIS에서 반환하는 식단 정보가 빈 슬라이스일 때, []이 아닌 nil을 반환했던 문제 수정
+
 ## [0.0.8] - 2026-02-07
 
 ### Changed
@@ -74,7 +80,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 기본 엔드포인트 구현
 
-[unreleased]: https://github.com/AfterHee/afterhee-server/compare/v0.0.8...HEAD
+[unreleased]: https://github.com/AfterHee/afterhee-server/compare/v0.0.9...HEAD
+[0.0.9]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.9
 [0.0.8]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.8
 [0.0.7]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.7
 [0.0.6]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.6
