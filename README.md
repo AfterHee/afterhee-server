@@ -13,9 +13,13 @@ duckdb db.duckdb < build.sql
 popd
 ```
 
-## Instruction
+## Instruction for developers
 
 ```sh
+podman compose -f docker-compose.dev.yml up
+# OR
+# docker compose -f docker-compose.dev.yml up
+
 export AFTERHEE_NEIS_API_KEY="YOUR_NEIS_API_KEY"
 go run .
 ```
