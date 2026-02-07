@@ -7,6 +7,7 @@ import (
 	"0tak2/afterhee-server/repository"
 	"0tak2/afterhee-server/service"
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "0tak2/afterhee-server/docs"
@@ -15,6 +16,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/swagger"
 	_ "github.com/marcboeker/go-duckdb/v2"
+	"github.com/redis/go-redis/v9"
 )
 
 // import "github.com/gofiber/fiber/v2"
@@ -26,6 +28,15 @@ func createDB(dbFileName string) *sql.DB {
 	}
 
 	return db
+}
+
+func createRDB(hostAndPort string, password string) *redis.Client {
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     hostAndPort,
+		Password: password,
+		DB:       0,
+	})
+	return rdb
 }
 
 // @title AfterHee API
@@ -41,9 +52,14 @@ func main() {
 	db := createDB(config.DBPath)
 	defer db.Close()
 
+	redisAddress := fmt.Sprintf("%s:%s", config.RedisHost, config.RedisPort)
+	rdb := createRDB(redisAddress, config.RedisPassword)
+	defer rdb.Close()
+
 	schoolRepository := repository.NewSchoolRepository(db)
+	cacheRepository := repository.NewCacheRepository(rdb)
 	neisNetworkRequest := network.NewNEISMealRequest()
-	schoolService := service.NewSchoolService(schoolRepository, neisNetworkRequest)
+	schoolService := service.NewSchoolService(schoolRepository, cacheRepository, neisNetworkRequest)
 	schoolController := controller.NewSchoolController(schoolService)
 
 	geminiNetworkRequest := network.NewGeminiRequest()

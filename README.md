@@ -13,9 +13,13 @@ duckdb db.duckdb < build.sql
 popd
 ```
 
-## Instruction
+## Instruction for developers
 
 ```sh
+podman compose -f docker-compose.dev.yml up
+# OR
+# docker compose -f docker-compose.dev.yml up
+
 export AFTERHEE_NEIS_API_KEY="YOUR_NEIS_API_KEY"
 go run .
 ```
@@ -50,8 +54,8 @@ docker build -t afterhee:latest -t afterhee:v0.0.1 .
 # 서버용 빌드
 docker build --platform linux/amd64 -t afterhee:latest -t afterhee:v0.0.1 .
 
-# podman
-podman build -t afterhee:latest -t afterhee:v0.0.1 .
+# podman (arm64)
+podman build --platform linux/arm64 -t afterhee:latest -t afterhee:v0.0.1 .
 ```
 
 ### Export Image
