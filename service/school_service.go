@@ -95,12 +95,11 @@ func (s schoolService) GetMealPlans(ctx context.Context, sidoEduOfficeCode strin
 
 	if cacheFetchErr == nil && cachedValue != nil {
 		var cachedData []Meal
-		bytes := []byte(*cachedValue)
-		unmarshalErr := json.Unmarshal(bytes, &cachedData)
-		if unmarshalErr != nil {
-			fmt.Printf("faliled to unmarshal cached data. error=%s\n", unmarshalErr.Error())
+		err := json.Unmarshal([]byte(*cachedValue), &cachedData)
+		if err == nil {
+			return cachedData, nil
 		}
-		return cachedData, nil
+		log.Printf("failed to unmarshal cached data: %v", err)
 	}
 
 	// Fetch server data
