@@ -3,7 +3,10 @@ package service
 import (
 	"0tak2/afterhee-server/network"
 	"0tak2/afterhee-server/repository"
+	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"sort"
 	"time"
@@ -41,18 +44,20 @@ type Meal struct {
 // Service
 type SchoolService interface {
 	GetSchools(keyword string) ([]School, error)
-	GetMealPlans(sidoEduOfficeCode string, schoolStandardCode string, from time.Time, to time.Time) ([]Meal, error)
+	GetMealPlans(ctx context.Context, sidoEduOfficeCode string, schoolStandardCode string, from time.Time, to time.Time) ([]Meal, error)
 }
 
 type schoolService struct {
-	repo repository.SchoolRepository
-	neis network.NEISMealRequest
+	repo  repository.SchoolRepository
+	cache repository.CacheRepository
+	neis  network.NEISMealRequest
 }
 
-func NewSchoolService(repo repository.SchoolRepository, neis network.NEISMealRequest) SchoolService {
+func NewSchoolService(repo repository.SchoolRepository, cache repository.CacheRepository, neis network.NEISMealRequest) SchoolService {
 	return &schoolService{
-		repo: repo,
-		neis: neis,
+		repo:  repo,
+		cache: cache,
+		neis:  neis,
 	}
 }
 
@@ -83,7 +88,22 @@ func (s schoolService) GetSchools(keyword string) ([]School, error) {
 	return schools, nil
 }
 
-func (s schoolService) GetMealPlans(sidoEduOfficeCode string, schoolStandardCode string, from time.Time, to time.Time) ([]Meal, error) {
+func (s schoolService) GetMealPlans(ctx context.Context, sidoEduOfficeCode string, schoolStandardCode string, from time.Time, to time.Time) ([]Meal, error) {
+	// Fetch cached data
+	cacheKey := fmt.Sprintf("%s_%s_%d_%d", sidoEduOfficeCode, schoolStandardCode, from.Unix(), to.Unix())
+	cachedValue, cacheFetchErr := s.cache.GetValue(ctx, cacheKey)
+
+	if cacheFetchErr == nil && cachedValue != nil {
+		var cachedData []Meal
+		bytes := []byte(*cachedValue)
+		unmarshalErr := json.Unmarshal(bytes, &cachedData)
+		if unmarshalErr != nil {
+			fmt.Printf("faliled to unmarshal cached data. error=%s\n", unmarshalErr.Error())
+		}
+		return cachedData, nil
+	}
+
+	// Fetch server data
 	result, err := s.neis.FetchMealPlan(sidoEduOfficeCode, schoolStandardCode, timeToString(from), timeToString((to)))
 	if err != nil {
 		return nil, err
@@ -120,6 +140,14 @@ func (s schoolService) GetMealPlans(sidoEduOfficeCode string, schoolStandardCode
 	sort.Slice(meals, func(i, j int) bool {
 		return meals[i].MlsvYmd < meals[j].MlsvYmd
 	})
+
+	jsonBytes, marshalErr := json.Marshal(meals)
+	if marshalErr != nil {
+		log.Printf("failed to marshal data that will be planned to cache. skip cache it. error=%s", marshalErr.Error())
+	} else {
+		ttl := 3 * 24 * time.Hour
+		s.cache.SetValue(ctx, cacheKey, string(jsonBytes), ttl)
+	}
 
 	return meals, nil
 }
