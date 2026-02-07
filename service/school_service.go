@@ -5,7 +5,6 @@ import (
 	"0tak2/afterhee-server/repository"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"sort"
@@ -109,7 +108,7 @@ func (s schoolService) GetMealPlans(ctx context.Context, sidoEduOfficeCode strin
 	}
 
 	if len(result.MealServiceDietInfo) < 2 {
-		return nil, errors.New("no meal rows") // TODO: Custom Error
+		return []Meal{}, nil
 	}
 
 	rows := result.MealServiceDietInfo[1].Row
