@@ -144,7 +144,7 @@ func (s schoolService) GetMealPlans(ctx context.Context, sidoEduOfficeCode strin
 	if marshalErr != nil {
 		log.Printf("failed to marshal data that will be planned to cache. skip cache it. error=%s", marshalErr.Error())
 	} else {
-		ttl := 3 * 24 * time.Hour
+		ttl := 24 * time.Hour
 		if err := s.cache.SetValue(ctx, cacheKey, string(jsonBytes), ttl); err != nil {
 			log.Printf("failed to cache meal plans: %v", err)
 		}

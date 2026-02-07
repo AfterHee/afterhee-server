@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- 식단 조회 캐싱 시, TTL을 기존 3일에서 1일로 변경
+
 ### Deprecated
                                                   
 ### Removed
