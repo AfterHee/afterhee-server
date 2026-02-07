@@ -1,4 +1,5 @@
 database/db.duckdb
 export_envs.sh
 **/.DS_Store
-contaeinrs/redis/data/dump.rdb
+containers/redis/data/dump.rdb
+containers/redis/conf/redis.conf
