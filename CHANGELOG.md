@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.0.6] - 2026-02-07
+
+- 식단 조회 캐싱
+
 ## [0.0.5] - 2025-09-11
 
 ### Added
@@ -54,7 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 기본 엔드포인트 구현
 
-[unreleased]: https://github.com/AfterHee/afterhee-server/compare/v0.0.5...HEAD
+[unreleased]: https://github.com/AfterHee/afterhee-server/compare/v0.0.6...HEAD
+[0.0.6]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.6
 [0.0.5]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.5
 [0.0.4]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.4
 [0.0.3]: https://github.com/AfterHee/afterhee-server/releases/tag/v0.0.3
