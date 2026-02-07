@@ -107,11 +107,12 @@ func (s schoolService) GetMealPlans(ctx context.Context, sidoEduOfficeCode strin
 		return nil, err
 	}
 
+	var rows []network.MealRow
 	if len(result.MealServiceDietInfo) < 2 {
-		return []Meal{}, nil
+		rows = []network.MealRow{}
+	} else {
+		rows = result.MealServiceDietInfo[1].Row
 	}
-
-	rows := result.MealServiceDietInfo[1].Row
 
 	var meals []Meal
 	for _, row := range rows {
