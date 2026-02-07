@@ -26,7 +26,7 @@ func (s *cacheRepository) GetValue(ctx context.Context, key string) (*string, er
 	if err == redis.Nil {
 		return nil, nil
 	} else if err != nil {
-		log.Printf("falied to fetch data from redis. key=%s error=%s\n", key, err.Error())
+		log.Printf("falied to fetch data from redis. key=%s error=%v\n", key, err)
 		return nil, err
 	}
 
@@ -36,7 +36,7 @@ func (s *cacheRepository) GetValue(ctx context.Context, key string) (*string, er
 func (s *cacheRepository) SetValue(ctx context.Context, key string, value string, expiration time.Duration) error {
 	err := s.rdb.SetNX(ctx, key, value, expiration).Err()
 	if err != nil {
-		log.Printf("falied to put data to redis. key=%s value=%s error=%s\n", key, value, err.Error())
+		log.Printf("falied to put data to redis. key=%s error=%v\n", key, err)
 		return err
 	}
 	return nil
