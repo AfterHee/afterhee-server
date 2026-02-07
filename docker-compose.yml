@@ -5,11 +5,23 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./containers/nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - afterhee1
       - afterhee2
       - afterhee3
+    networks:
+      - afterhee-network
+    restart: unless-stopped
+
+  afterhee-redis:
+    image: redis:8.2.3-alpine
+    container_name: afterhee-redis
+    ports:
+      - "${AFTERHEE_REDIS_PORT:-6379}:6379"
+    volumes:
+      - ./containers/redis/data:/data
+      - ./containers/redis/conf/redis.conf:/usr/local/conf/redis.conf
     networks:
       - afterhee-network
     restart: unless-stopped
@@ -19,11 +31,16 @@ services:
     container_name: afterhee1
     environment:
       AFTERHEE_PORT: ${AFTERHEE_PORT:-8080}
+      AFTERHEE_REDIS_HOST: afterhee-redis
+      AFTERHEE_REDIS_PORT: ${AFTERHEE_REDIS_PORT:-6379}
+      AFTERHEE_REDIS_PASSWORD: ${AFTERHEE_REDIS_PASSWORD}
       AFTERHEE_NEIS_API_KEY: ${AFTERHEE_NEIS_API_KEY}
       AFTERHEE_GEMINI_API_KEY: ${AFTERHEE_GEMINI_API_KEY}
       AFTERHEE_PROFILE: ${AFTERHEE_PROFILE}
     expose:
       - "8080"
+    depends_on:
+      - afterhee-redis
     networks:
       - afterhee-network
     restart: unless-stopped
@@ -33,11 +50,16 @@ services:
     container_name: afterhee2
     environment:
       AFTERHEE_PORT: ${AFTERHEE_PORT:-8080}
+      AFTERHEE_REDIS_HOST: afterhee-redis
+      AFTERHEE_REDIS_PORT: ${AFTERHEE_REDIS_PORT:-6379}
+      AFTERHEE_REDIS_PASSWORD: ${AFTERHEE_REDIS_PASSWORD}
       AFTERHEE_NEIS_API_KEY: ${AFTERHEE_NEIS_API_KEY}
       AFTERHEE_GEMINI_API_KEY: ${AFTERHEE_GEMINI_API_KEY}
       AFTERHEE_PROFILE: ${AFTERHEE_PROFILE}
     expose:
       - "8080"
+    depends_on:
+      - afterhee-redis
     networks:
       - afterhee-network
     restart: unless-stopped
@@ -47,11 +69,16 @@ services:
     container_name: afterhee3
     environment:
       AFTERHEE_PORT: ${AFTERHEE_PORT:-8080}
+      AFTERHEE_REDIS_HOST: afterhee-redis
+      AFTERHEE_REDIS_PORT: ${AFTERHEE_REDIS_PORT:-6379}
+      AFTERHEE_REDIS_PASSWORD: ${AFTERHEE_REDIS_PASSWORD}
       AFTERHEE_NEIS_API_KEY: ${AFTERHEE_NEIS_API_KEY}
       AFTERHEE_GEMINI_API_KEY: ${AFTERHEE_GEMINI_API_KEY}
       AFTERHEE_PROFILE: ${AFTERHEE_PROFILE}
     expose:
       - "8080"
+    depends_on:
+      - afterhee-redis
     networks:
       - afterhee-network
     restart: unless-stopped

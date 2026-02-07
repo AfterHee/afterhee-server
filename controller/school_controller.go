@@ -75,7 +75,7 @@ func (ctl *schoolContoller) ListMeals(c *fiber.Ctx) error {
 		return ErrorOf(fiber.StatusBadRequest, "40000", MessageOfCode(fiber.StatusBadRequest))
 	}
 
-	meals, err := ctl.svc.GetMealPlans(eduOfficeCode, schoolCode, fromTime, toTime)
+	meals, err := ctl.svc.GetMealPlans(c.Context(), eduOfficeCode, schoolCode, fromTime, toTime)
 	if err != nil {
 		log.Println(err)
 		return ErrorOf(fiber.StatusInternalServerError, "50000", MessageOfCode(fiber.StatusInternalServerError))

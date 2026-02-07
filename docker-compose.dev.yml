@@ -1,0 +1,16 @@
+services:
+  afterhee-redis:
+    image: redis:8.2.3-alpine
+    container_name: afterhee-redis
+    ports:
+      - "56379:6379" # 개발 머신에서 로컬로 서버를 실행하는 경우 접속할 컨테이너 외부 포트
+    volumes:
+      - ./containers/redis/data:/data
+      - ./containers/redis/conf/redis.dev.conf:/usr/local/conf/redis.conf
+    networks:
+      - afterhee-dev-network
+    restart: unless-stopped
+
+networks:
+  afterhee-dev-network:
+    driver: bridge
