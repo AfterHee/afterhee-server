@@ -109,7 +109,7 @@ func TestSchoolService_GetMealPlans(t *testing.T) {
 		mockCache.AssertCalled(t, "SetValue", ctx, mock.Anything, mock.Anything, mock.Anything)
 	})
 
-	t.Run("급식 정보가 없는 경우 에러를 반환한다", func(t *testing.T) {
+	t.Run("급식 정보가 없는 경우 빈 슬라이스를 반환한다", func(t *testing.T) {
 		mockCache := new(extendedMockCache)
 		mockNEIS := new(mockNEISRequest)
 		service := NewSchoolService(nil, mockCache, mockNEIS)
@@ -129,8 +129,7 @@ func TestSchoolService_GetMealPlans(t *testing.T) {
 
 		result, err := service.GetMealPlans(ctx, sidoCode, schoolCode, from, to)
 
-		assert.Error(t, err)
-		assert.Equal(t, "no meal rows", err.Error())
-		assert.Nil(t, result)
+		assert.Len(t, result, 0)
+		assert.Nil(t, err)
 	})
 }
