@@ -89,7 +89,7 @@ func (s schoolService) GetSchools(keyword string) ([]School, error) {
 
 func (s schoolService) GetMealPlans(ctx context.Context, sidoEduOfficeCode string, schoolStandardCode string, from time.Time, to time.Time) ([]Meal, error) {
 	// Fetch cached data
-	cacheKey := fmt.Sprintf("%s_%s_%d_%d", sidoEduOfficeCode, schoolStandardCode, from.Unix(), to.Unix())
+	cacheKey := s.getMealCacheKey(sidoEduOfficeCode, schoolStandardCode, from, to)
 	cachedValue, cacheFetchErr := s.cache.GetValue(ctx, cacheKey)
 
 	if cacheFetchErr == nil && cachedValue != nil {
@@ -107,13 +107,13 @@ func (s schoolService) GetMealPlans(ctx context.Context, sidoEduOfficeCode strin
 		return nil, err
 	}
 
-	var rows []network.MealRow
 	if len(result.MealServiceDietInfo) < 2 {
-		rows = []network.MealRow{}
-	} else {
-		rows = result.MealServiceDietInfo[1].Row
+		emptyValue := []Meal{}
+
+		return emptyValue, nil
 	}
 
+	rows := result.MealServiceDietInfo[1].Row
 	var meals []Meal
 	for _, row := range rows {
 		log.Println(row)
@@ -151,6 +151,23 @@ func (s schoolService) GetMealPlans(ctx context.Context, sidoEduOfficeCode strin
 	}
 
 	return meals, nil
+}
+
+func (s schoolService) getMealCacheKey(sidoEduOfficeCode string, schoolStandardCode string, from time.Time, to time.Time) string {
+	return fmt.Sprintf("%s_%s_%d_%d", sidoEduOfficeCode, schoolStandardCode, from.Unix(), to.Unix())
+}
+
+func (s schoolService) setMealCache(ctx context.Context, sidoEduOfficeCode string, schoolStandardCode string, from time.Time, to time.Time, meals []Meal) {
+	cacheKey := s.getMealCacheKey(sidoEduOfficeCode, schoolStandardCode, from, to)
+	jsonBytes, marshalErr := json.Marshal(meals)
+	if marshalErr != nil {
+		log.Printf("failed to marshal data that will be planned to cache. skip cache it. error=%s", marshalErr.Error())
+	} else {
+		ttl := 24 * time.Hour
+		if err := s.cache.SetValue(ctx, cacheKey, string(jsonBytes), ttl); err != nil {
+			log.Printf("failed to cache meal plans: %v", err)
+		}
+	}
 }
 
 func timeToString(time time.Time) string {
